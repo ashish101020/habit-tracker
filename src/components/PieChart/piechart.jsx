@@ -44,7 +44,7 @@ export default function PieChartComponent() {
 
   return (
     <div className={styles.pieChart}>
-      <h2>Recent Habit Completions</h2>
+      <h2>Average Completions</h2>
 
       <div className={styles.pieWrapper}>
 
