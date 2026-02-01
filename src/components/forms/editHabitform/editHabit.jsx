@@ -9,7 +9,6 @@ export default function EditHabitForm() {
 
   const {
     setIsModalOpen,
-    isOpenEditor,
     setIsOpenEditor,
     editingHabit,
     setEditingHabit,
@@ -94,7 +93,7 @@ export default function EditHabitForm() {
 
         <div style={{ display: "flex", gap: "10px" }}>
           <Button type="submit" variant="primary" shadow>
-            Save
+            Update
           </Button>
 
           <Button variant="secondary" shadow handleClick={handleCancel}>

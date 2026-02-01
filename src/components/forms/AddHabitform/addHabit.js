@@ -13,7 +13,6 @@ export default function AddHabitForm() {
     setDescription,
     selectedHabits,
     setSelectedHabits,
-    setCategoryHabits,
     setHabits,
     setIsModalOpen,
     setIsOpenHabitInput
@@ -34,17 +33,8 @@ export default function AddHabitForm() {
       habits: selectedHabits,
     };
 
-    // Save history
-        setHabits((prev) => [...prev, newEntry]);
-
-    // Update totals
-    setCategoryHabits((prev) => {
-      const updated = { ...prev };
-      selectedHabits.forEach((habit) => {
-        updated[habit] += 1;
-      });
-      return updated;
-    });
+    // ✅ Only save history — totals auto update via useMemo
+    setHabits((prev) => [...prev, newEntry]);
 
     // Reset form
     setSelectedHabits([]);
@@ -52,11 +42,13 @@ export default function AddHabitForm() {
     setDate("");
     setIsOpenHabitInput(false);
 
-    enqueueSnackbar("Habit data added!", { variant: "success" });
+    enqueueSnackbar("Adds data successfully", { variant: "success" });
   };
 
-  const handleCancel=() => {setIsOpenHabitInput(false)
-              setIsModalOpen(false)};
+  const handleCancel = () => {
+    setIsOpenHabitInput(false);
+    setIsModalOpen(false);
+  };
 
   const handleCheckboxChange = (habit) => {
     setSelectedHabits((prev) =>
@@ -69,7 +61,6 @@ export default function AddHabitForm() {
       <h3>What Did You Do Today</h3>
 
       <form onSubmit={handleSubmit}>
-        {/* Date Input */}
         <input
           type="date"
           value={date}
@@ -77,7 +68,6 @@ export default function AddHabitForm() {
           required
         />
 
-        {/* Checkboxes */}
         <label>
           <input
             type="checkbox"
@@ -108,7 +98,6 @@ export default function AddHabitForm() {
           Meditation
         </label>
 
-        {/* Description */}
         <input
           type="text"
           placeholder="Enter a short description"
@@ -117,7 +106,6 @@ export default function AddHabitForm() {
           required
         />
 
-        {/* Buttons */}
         <div style={{ display: "flex", gap: "10px" }}>
           <Button type="submit" variant="primary" shadow>
             Submit

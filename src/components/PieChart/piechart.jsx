@@ -33,41 +33,40 @@ const renderCustomizedLabel = ({
 };
 
 export default function PieChartComponent() {
-
   const { habitTotals } = useHabitContext();
-  
-  let data = [
+
+  const data = [
     { name: "Reading", value: habitTotals.reading },
     { name: "Exercise", value: habitTotals.exercise },
     { name: "Meditation", value: habitTotals.meditation },
   ];
+
+  const total = data.reduce((sum, item) => sum + item.value, 0);
 
   return (
     <div className={styles.pieChart}>
       <h2>Average Completions</h2>
 
       <div className={styles.pieWrapper}>
-
-    <ResponsiveContainer width="100%" height={250}>
-      <PieChart width={400} height={400}>
-        <Pie
-          data={data}
-          cx="50%"
-          cy="50%"
-          labelLine={false}
-          label={renderCustomizedLabel}
-          outerRadius={80}
-          fill="#8884d8"
-          dataKey="value"
-          >
-          {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-          ))}
-        </Pie>
-        <Legend iconType="rect" verticalAlign="bottom" />
-      </PieChart>
-    </ResponsiveContainer>
-          </div>
-          </div>
+        <ResponsiveContainer width="100%" height={250}>
+          <PieChart>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              label={total === 0 ? false : renderCustomizedLabel}
+              outerRadius={80}
+              dataKey="value"
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Legend iconType="rect" verticalAlign="bottom" />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
   );
 }
