@@ -1,42 +1,44 @@
 import styles from "./list.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Pagination from "../pagination/pagination";
 import HabitCard from "../transcation/transcation";
 import { useHabitContext } from "../../context/habitContext";
 
 export default function DataList() {
+  const {
+    habits,
+    setHabits,
+    setIsDisplayEditor,
+    setIsModalOpen,
+    setEditingHabit,
+  } = useHabitContext();
 
-  const { habits, setHabits, setIsDisplayEditor, setIsModalOpen } = useHabitContext();
-
-  
-  const [currentDatas, setcurrentDatas] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const maxRecords = 3;
-  const [totalPages, setTotalPages] = useState(0);
+
+  const totalPages = Math.ceil(habits.length / maxRecords);
+
+  const currentDatas = useMemo(() => {
+    const startIndex = (currentPage - 1) * maxRecords;
+    return habits.slice(startIndex, startIndex + maxRecords);
+  }, [currentPage, habits]);
 
   const handleDelete = (id) => {
     setHabits((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const handleEdit = (id) => {
-    setIsModalOpen(true)
+  const handleEdit = (habit) => {
+    setEditingHabit(habit);
+    setIsModalOpen(true);
     setIsDisplayEditor(true);
   };
 
+  // If last item on page deleted → go back one page
   useEffect(() => {
-    const startIndex = (currentPage - 1) * maxRecords;
-    const endIndex = Math.min(currentPage * maxRecords, habits.length);
-
-    setcurrentDatas([...habits].slice(startIndex, endIndex));
-    setTotalPages(Math.ceil(habits.length / maxRecords));
-  }, [currentPage, habits]);
-
-  // update page if all items on current page have been deleted
-  useEffect(() => {
-    if (totalPages < currentPage && currentPage > 1) {
+    if (currentPage > totalPages && currentPage > 1) {
       setCurrentPage((prev) => prev - 1);
     }
-  }, [totalPages]);
+  }, [habits, currentPage, totalPages]);
 
   return (
     <div className={styles.transactionsWrapper}>
@@ -47,13 +49,14 @@ export default function DataList() {
           <div>
             {currentDatas.map((d) => (
               <HabitCard
-                details={d}
                 key={d.id}
+                details={d}
                 handleDelete={() => handleDelete(d.id)}
-                handleEdit={() => handleEdit(d.id)}
+                handleEdit={() => handleEdit(d)}
               />
             ))}
           </div>
+
           {totalPages > 1 && (
             <Pagination
               updatePage={setCurrentPage}
@@ -64,10 +67,9 @@ export default function DataList() {
         </div>
       ) : (
         <div className={styles.emptyTransactionsWrapper}>
-          <p>No transactions!</p>
+          <p>No habits tracked yet!</p>
         </div>
       )}
-
     </div>
   );
 }

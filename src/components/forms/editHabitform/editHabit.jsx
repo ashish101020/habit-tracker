@@ -4,57 +4,63 @@ import { useEffect } from "react";
 import { useSnackbar } from "notistack";
 import { useHabitContext } from "../../../context/habitContext";
 
-export default function AddHabitForm() {
+export default function EditHabitForm() {
   const { enqueueSnackbar } = useSnackbar();
 
   const {
-    setIsDisplayEditor,
     setIsModalOpen,
-    isDisplayEditor,
+    isOpenEditor,
+    setIsOpenEditor,
+    editingHabit,
     setEditingHabit,
     setHabits,
-    setDescription,
     description,
+    setDescription,
   } = useHabitContext();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (!isDisplayEditor) return;
+    if (!editingHabit) return;
 
     setHabits((prev) =>
       prev.map((habit) =>
-        habit.id === isDisplayEditor.id ? { ...habit, description } : habit,
-      ),
+        habit.id === editingHabit.id
+          ? { ...habit, description }
+          : habit
+      )
     );
 
     enqueueSnackbar("Description updated!", { variant: "success" });
 
     setEditingHabit(null);
     setDescription("");
-    setIsDisplayEditor(false);
+    setIsOpenEditor(false);
+    setIsModalOpen(false);
   };
 
-  const handleCancel=() => {setIsDisplayEditor(false)
-              setIsModalOpen(false)};
-      
+  const handleCancel = () => {
+    setIsOpenEditor(false);
+    setIsModalOpen(false);
+    setEditingHabit(null);
+  };
 
   useEffect(() => {
-    if (isDisplayEditor) {
-      setDescription(isDisplayEditor.description);
+    if (editingHabit) {
+      setDescription(editingHabit.description);
     }
-  }, [isDisplayEditor, setDescription]);
+  }, [editingHabit, setDescription]);
 
   return (
     <div className={styles.formWrapper}>
       <h3>Edit Habit</h3>
+
       <form onSubmit={handleSubmit}>
-        <input type="date" value={isDisplayEditor?.date || ""} disabled />
+        <input type="date" value={editingHabit?.date || ""} disabled />
 
         <label>
           <input
             type="checkbox"
-            checked={isDisplayEditor?.habits.includes("reading")}
+            checked={editingHabit?.habits.includes("reading") || false}
             disabled
           />
           Reading
@@ -63,7 +69,7 @@ export default function AddHabitForm() {
         <label>
           <input
             type="checkbox"
-            checked={isDisplayEditor?.habits.includes("exercise")}
+            checked={editingHabit?.habits.includes("exercise") || false}
             disabled
           />
           Exercise
@@ -72,7 +78,7 @@ export default function AddHabitForm() {
         <label>
           <input
             type="checkbox"
-            checked={isDisplayEditor?.habits.includes("meditation")}
+            checked={editingHabit?.habits.includes("meditation") || false}
             disabled
           />
           Meditation
@@ -86,16 +92,12 @@ export default function AddHabitForm() {
           required
         />
 
-        <div style={{ display: "flex" }}>
-          <Button type="submit" style="primary" shadow>
-            Upload
+        <div style={{ display: "flex", gap: "10px" }}>
+          <Button type="submit" variant="primary" shadow>
+            Save
           </Button>
 
-          <Button
-            style="secondary"
-            shadow
-            handleClick={handleCancel}
-          >
+          <Button variant="secondary" shadow handleClick={handleCancel}>
             Cancel
           </Button>
         </div>

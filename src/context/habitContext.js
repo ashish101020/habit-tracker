@@ -15,7 +15,10 @@ const HabitProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : [];
   });
 
-  const [isDisplayEditor, setIsDisplayEditor] = useState(false);
+  const [editingHabit, setEditingHabit] = useState(null);
+const [isOpenEditor, setIsOpenEditor] = useState(false);
+
+  
 
   const habitTotals = useMemo(() => {
     const totals = {
@@ -71,27 +74,31 @@ const HabitProvider = ({ children }) => {
 
   return (
     <HabitContext.Provider
-      value={{
-        isModalOpen,
-         setIsModalOpen,
-        isOpenHabitInput,
-        setIsOpenHabitInput,
-        isDisplayEditor,
-         setIsDisplayEditor,
+  value={{
+    isModalOpen,
+    setIsModalOpen,
+    isOpenHabitInput,
+    setIsOpenHabitInput,
 
-        date,
-        setDate,
-        description,
-        setDescription,
-        selectedHabits,
-        setSelectedHabits,
-        habits,
-        setHabits,
+    isOpenEditor,
+    setIsOpenEditor,
+    editingHabit,
+    setEditingHabit,
 
-        habitTotals,
-        lastWeekTotals
-      }}
-    >
+    date,
+    setDate,
+    description,
+    setDescription,
+    selectedHabits,
+    setSelectedHabits,
+    habits,
+    setHabits,
+
+    habitTotals,
+    lastWeekTotals
+  }}
+>
+
       {children}
     </HabitContext.Provider>
   );
