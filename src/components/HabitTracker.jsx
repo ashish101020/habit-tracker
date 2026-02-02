@@ -6,8 +6,7 @@ import PieChart from "./PieChart/piechart";
 import BarChart from "./Barchart/Barchart";
 import AddHabitForm from "./forms/AddHabitform/addHabit";
 
-function HabitTracker() {  
-
+function HabitTracker() {
   return (
     <div className={styles.container}>
       <h1>Habit Tracker</h1>
@@ -23,14 +22,11 @@ function HabitTracker() {
       </div>
 
       <div className={styles.habitsWrapper}>
-        <HabitList/>
+        <HabitList />
       </div>
 
       {/* Modals */}
 
-      <Modal>
-        <AddHabitForm />
-      </Modal>
       <Modal>
         <AddHabitForm />
       </Modal>

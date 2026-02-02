@@ -2,6 +2,7 @@ import styles from "./addHabit.module.css";
 import Button from "../../Button/Button";
 import { useSnackbar } from "notistack";
 import { useHabitContext } from "../../../context/habitContext";
+import { useEffect } from "react";
 
 export default function AddHabitForm() {
   const { enqueueSnackbar } = useSnackbar();
@@ -15,12 +16,39 @@ export default function AddHabitForm() {
     setSelectedHabits,
     setHabits,
     setIsModalOpen,
-    setIsOpenHabitInput
+    setIsOpenHabitInput,
+    editingHabit,
+    setEditingHabit,
+    isOpenEditor,
+    setIsOpenEditor,
   } = useHabitContext();
 
+  // ✅ Submit handler for BOTH add & edit
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // ---------------- EDIT MODE ----------------
+    if (isOpenEditor) {
+      if (!editingHabit) return;
+
+      setHabits((prev) =>
+        prev.map((habit) =>
+          habit.id === editingHabit.id
+            ? { ...habit, description }
+            : habit
+        )
+      );
+
+      enqueueSnackbar("Description updated!", { variant: "success" });
+
+      setEditingHabit(null);
+      setDescription("");
+      setIsOpenEditor(false);
+      setIsModalOpen(false);
+      return;
+    }
+
+    // ---------------- ADD MODE ----------------
     if (selectedHabits.length === 0) {
       enqueueSnackbar("Please select at least one habit", { variant: "warning" });
       return;
@@ -33,21 +61,23 @@ export default function AddHabitForm() {
       habits: selectedHabits,
     };
 
-    // ✅ Only save history — totals auto update via useMemo
     setHabits((prev) => [...prev, newEntry]);
 
-    // Reset form
     setSelectedHabits([]);
     setDescription("");
     setDate("");
     setIsOpenHabitInput(false);
+    setIsModalOpen(false);
 
-    enqueueSnackbar("Adds data successfully", { variant: "success" });
+    enqueueSnackbar("Habit added successfully!", { variant: "success" });
   };
 
   const handleCancel = () => {
     setIsOpenHabitInput(false);
     setIsModalOpen(false);
+    setIsOpenEditor(false);
+    setEditingHabit(null);
+    setDescription("");
   };
 
   const handleCheckboxChange = (habit) => {
@@ -56,24 +86,36 @@ export default function AddHabitForm() {
     );
   };
 
+  // ✅ Load existing data when editing
+  useEffect(() => {
+    if (editingHabit) {
+      setDescription(editingHabit.description);
+      setDate(editingHabit.date);
+      setSelectedHabits(editingHabit.habits);
+    }
+  }, [editingHabit, setDescription, setDate, setSelectedHabits]);
+
   return (
     <div className={styles.formWrapper}>
-      <h3>What Did You Do Today</h3>
+      <h2>{isOpenEditor ? "Edit Habit" : "What Did You Do Today?"}</h2>
 
       <form onSubmit={handleSubmit}>
+        {/* DATE */}
         <input
           type="date"
           value={date}
-          onChange={(e) => setDate(e.target.value)}
+          onChange={(e) => !isOpenEditor && setDate(e.target.value)}
           required
+          disabled={isOpenEditor}
         />
 
+        {/* CHECKBOXES */}
         <label>
           <input
             type="checkbox"
-            name="reading"
             checked={selectedHabits.includes("reading")}
-            onChange={() => handleCheckboxChange("reading")}
+            onChange={() => !isOpenEditor && handleCheckboxChange("reading")}
+            disabled={isOpenEditor}
           />
           Reading
         </label>
@@ -81,9 +123,9 @@ export default function AddHabitForm() {
         <label>
           <input
             type="checkbox"
-            name="exercise"
             checked={selectedHabits.includes("exercise")}
-            onChange={() => handleCheckboxChange("exercise")}
+            onChange={() => !isOpenEditor && handleCheckboxChange("exercise")}
+            disabled={isOpenEditor}
           />
           Exercise
         </label>
@@ -91,13 +133,14 @@ export default function AddHabitForm() {
         <label>
           <input
             type="checkbox"
-            name="meditation"
             checked={selectedHabits.includes("meditation")}
-            onChange={() => handleCheckboxChange("meditation")}
+            onChange={() => !isOpenEditor && handleCheckboxChange("meditation")}
+            disabled={isOpenEditor}
           />
           Meditation
         </label>
 
+        {/* DESCRIPTION */}
         <input
           type="text"
           placeholder="Enter a short description"
@@ -108,7 +151,7 @@ export default function AddHabitForm() {
 
         <div style={{ display: "flex", gap: "10px" }}>
           <Button type="submit" variant="primary" shadow>
-            Submit
+            {isOpenEditor ? "Update" : "Submit"}
           </Button>
 
           <Button variant="secondary" shadow handleClick={handleCancel}>

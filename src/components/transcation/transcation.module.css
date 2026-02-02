@@ -4,73 +4,98 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
   margin-bottom: 24px;
+  gap: 10px;
 }
+
 .cardInner {
   display: flex;
   gap: 20px;
   align-items: center;
 }
-.cardIcon {
-  background: #d9d9d9;
-  border-radius: 50%;
-  padding: 10px;
-  font-size: 1.2rem;
+
+.cardInnerRight {
+  display: flex;
+  gap: 20px;
+  align-items: center;
 }
-.cardInfo h5 {
-  font-family: var(--font-body);
+
+.cardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cardTitle {
   font-size: 1rem;
+  font-weight: 600;
   color: #000;
-  font-weight: 400;
 }
-.cardInfo p {
-  color: #9b9b9b;
-  font-size: 1rem;
+
+.habitList {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
 }
-.cardPrice {
-  color: #f4bb4a;
-  font-weight: 700;
+
+.habitTag {
+  background: #eee;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  text-transform: capitalize;
 }
+
+.cardDate {
+  font-size: 0.9rem;
+  color: #666;
+}
+
 .cardButtonWrapper {
   display: flex;
   gap: 8px;
 }
+
 .cardButtonWrapper button {
-  padding: 12px;
-  border-radius: 15px;
+  padding: 10px;
+  border-radius: 12px;
   border: 0;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   cursor: pointer;
   color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .cardDelete {
   background: #ff3e3e;
 }
+
 .cardEdit {
   background: #f4bb4a;
 }
 
+/* 📱 Mobile */
 @media (max-width: 767px) {
   .card {
     flex-direction: column;
     align-items: flex-start;
   }
-  .cardInner {
-    gap: 12px;
-  }
-  .cardInner:last-child {
-    padding-left: 3.3rem;
-    justify-content: space-between;
+
+  .cardInnerRight {
     width: 100%;
+    justify-content: space-between;
   }
+
   .cardButtonWrapper button {
-    font-size: 1.2rem;
+    font-size: 1rem;
     padding: 8px;
-    border-radius: 0.5rem;
+    border-radius: 8px;
   }
-  .cardInfo p {
+
+  .cardDate {
     font-size: 12px;
   }
 }

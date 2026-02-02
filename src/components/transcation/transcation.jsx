@@ -5,28 +5,39 @@ import { MdOutlineModeEdit } from "react-icons/md";
 export default function HabitCard({ details, handleDelete, handleEdit }) {
   return (
     <div className={styles.card}>
+      {/* LEFT SIDE */}
       <div className={styles.cardInner}>
         <div className={styles.cardInfo}>
           <p className={styles.cardTitle}>{details.description}</p>
+
           <div className={styles.habitList}>
             {details.habits.map((habit, index) => (
               <span key={index} className={styles.habitTag}>
-                {habit }
+                {habit}
               </span>
             ))}
           </div>
         </div>
       </div>
 
-      <div className={styles.cardInner}>
+      {/* RIGHT SIDE */}
+      <div className={styles.cardInnerRight}>
         <p className={styles.cardDate}>{details.date}</p>
 
         <div className={styles.cardButtonWrapper}>
-          <button className={styles.cardDelete} onClick={handleDelete}>
+          <button
+            className={styles.cardDelete}
+            onClick={handleDelete}
+            aria-label="Delete habit"
+          >
             <IoMdCloseCircleOutline />
           </button>
 
-          <button className={styles.cardEdit} onClick={handleEdit}>
+          <button
+            className={styles.cardEdit}
+            onClick={handleEdit}
+            aria-label="Edit habit"
+          >
             <MdOutlineModeEdit />
           </button>
         </div>

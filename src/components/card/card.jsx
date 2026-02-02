@@ -4,7 +4,7 @@ import styles from "./Card.module.css";
 import { useHabitContext } from "../../context/habitContext";
 
 function Card({ buttonType, success = true }) {
-  const { setIsOpenHabitInput, setIsModalOpen } = useHabitContext();
+  const { setIsOpenHabitInput, setIsModalOpen, setIsOpenEditor } = useHabitContext();
 
   return (
     <div className={styles.card}>
@@ -13,6 +13,7 @@ function Card({ buttonType, success = true }) {
         handleClick={() => {
           setIsModalOpen(true);
           setIsOpenHabitInput(true);
+          setIsOpenEditor(false);
         }}
         style={buttonType}
       >

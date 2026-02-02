@@ -8,9 +8,10 @@ export default function DataList() {
   const {
     habits,
     setHabits,
-    setIsDisplayEditor,
     setIsModalOpen,
     setEditingHabit,
+    setIsOpenEditor,
+    setIsOpenHabitInput,
   } = useHabitContext();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -29,8 +30,9 @@ export default function DataList() {
 
   const handleEdit = (habit) => {
     setEditingHabit(habit);
+    setIsOpenHabitInput(false);
     setIsModalOpen(true);
-    setIsDisplayEditor(true);
+    setIsOpenEditor(true);
   };
 
   // If last item on page deleted → go back one page
