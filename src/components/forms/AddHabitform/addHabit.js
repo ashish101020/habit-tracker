@@ -23,7 +23,6 @@ export default function AddHabitForm() {
     setIsOpenEditor,
   } = useHabitContext();
 
-  // ✅ Submit handler for BOTH add & edit
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -33,9 +32,7 @@ export default function AddHabitForm() {
 
       setHabits((prev) =>
         prev.map((habit) =>
-          habit.id === editingHabit.id
-            ? { ...habit, description }
-            : habit
+          habit.id === editingHabit.id ? { ...habit, description, selectedHabits } : habit
         )
       );
 
@@ -50,7 +47,9 @@ export default function AddHabitForm() {
 
     // ---------------- ADD MODE ----------------
     if (selectedHabits.length === 0) {
-      enqueueSnackbar("Please select at least one habit", { variant: "warning" });
+      enqueueSnackbar("Please select at least one habit", {
+        variant: "warning",
+      });
       return;
     }
 
@@ -69,7 +68,7 @@ export default function AddHabitForm() {
     setIsOpenHabitInput(false);
     setIsModalOpen(false);
 
-    enqueueSnackbar("Habit added successfully!", { variant: "success" });
+    enqueueSnackbar("Adds data successfully", { variant: "success" });
   };
 
   const handleCancel = () => {
@@ -86,7 +85,6 @@ export default function AddHabitForm() {
     );
   };
 
-  // ✅ Load existing data when editing
   useEffect(() => {
     if (editingHabit) {
       setDescription(editingHabit.description);
@@ -104,41 +102,53 @@ export default function AddHabitForm() {
         <input
           type="date"
           value={date}
+          name="date"
           onChange={(e) => !isOpenEditor && setDate(e.target.value)}
           required
           disabled={isOpenEditor}
         />
 
         {/* CHECKBOXES */}
-        <label>
-          <input
-            type="checkbox"
-            checked={selectedHabits.includes("reading")}
-            onChange={() => !isOpenEditor && handleCheckboxChange("reading")}
-            disabled={isOpenEditor}
-          />
-          Reading
-        </label>
+        <div className={styles.checkboxGroup}>
+          <label htmlFor="reading">
+            <input
+              id="reading"
+              type="checkbox"
+              name="reading"
+              checked={selectedHabits.includes("reading")}
+              // onChange={() => !isOpenEditor && handleCheckboxChange("reading")}
+              onChange={() => handleCheckboxChange("reading")}
+              disabled={isOpenEditor}
+            />
+            Reading
+          </label>
 
-        <label>
-          <input
-            type="checkbox"
-            checked={selectedHabits.includes("exercise")}
-            onChange={() => !isOpenEditor && handleCheckboxChange("exercise")}
-            disabled={isOpenEditor}
-          />
-          Exercise
-        </label>
+          <label htmlFor="exercise">
+            <input
+              id="exercise"
+              type="checkbox"
+              name="exercise"
+              checked={selectedHabits.includes("exercise")}
+              // onChange={() => !isOpenEditor && handleCheckboxChange("exercise")}
+              onChange={() => handleCheckboxChange("exercise")}
+              disabled={isOpenEditor}
+            />
+            Exercise
+          </label>
 
-        <label>
-          <input
-            type="checkbox"
-            checked={selectedHabits.includes("meditation")}
-            onChange={() => !isOpenEditor && handleCheckboxChange("meditation")}
-            disabled={isOpenEditor}
-          />
-          Meditation
-        </label>
+          <label htmlFor="meditation">
+            <input
+              id="meditation"
+              type="checkbox"
+              name="meditation"
+              checked={selectedHabits.includes("meditation")}
+              // onChange={() => !isOpenEditor && handleCheckboxChange("meditation")}
+              onChange={() => handleCheckboxChange("meditation")}
+              disabled={isOpenEditor}
+            />
+            Meditation
+          </label>
+        </div>
 
         {/* DESCRIPTION */}
         <input

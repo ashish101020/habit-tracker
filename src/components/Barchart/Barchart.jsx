@@ -4,6 +4,7 @@ import {
   XAxis,
   YAxis,
   ResponsiveContainer,
+  Tooltip,
 } from "recharts";
 import styles from "./Barchart.module.css";
 import { useHabitContext } from "../../context/habitContext";
@@ -22,17 +23,28 @@ export default function BarChartComponent() {
       <h2>Top Habits (Last Week)</h2>
 
       <div className={styles.barWrapper}>
-        <ResponsiveContainer width="100%" height={280}>
-          <BarChart data={data} layout="vertical">
-            <XAxis type="number" axisLine={false} tickLine={false} />
+        <ResponsiveContainer width="100%" height={260}>
+          <BarChart
+            data={data}
+            layout="vertical"
+            margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
+          >
+            <XAxis type="number" hide />
             <YAxis
               type="category"
-              width={100}
               dataKey="name"
+              width={90}
+              tick={{ fontSize: 12 }}
               axisLine={false}
               tickLine={false}
             />
-            <Bar dataKey="value" fill="#8884d8" barSize={25} radius={[0, 10, 10, 0]} />
+            <Tooltip />
+            <Bar
+              dataKey="value"
+              fill="#8884d8"
+              barSize={18}
+              radius={[0, 8, 8, 0]}
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>

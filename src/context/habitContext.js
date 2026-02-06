@@ -47,7 +47,7 @@ const [isOpenEditor, setIsOpenEditor] = useState(false);
 
   const today = new Date();
   const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(today.getDate() - 6); // include today (7 days total)
+  sevenDaysAgo.setDate(today.getDate() - 6);
 
   habits.forEach((entry) => {
     const entryDate = new Date(entry.date);
@@ -68,7 +68,6 @@ const [isOpenEditor, setIsOpenEditor] = useState(false);
 
   useEffect(() => {
   localStorage.setItem("habits", JSON.stringify(habits));
-  console.log(habits)
 }, [habits]);
 
 

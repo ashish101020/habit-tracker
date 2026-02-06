@@ -3,8 +3,10 @@ import Button from "../Button/Button";
 import styles from "./Card.module.css";
 import { useHabitContext } from "../../context/habitContext";
 
-function Card({ buttonType, success = true }) {
-  const { setIsOpenHabitInput, setIsModalOpen, setIsOpenEditor } = useHabitContext();
+function Card({ buttonType }) {
+  const { 
+    setIsOpenHabitInput,
+     setIsModalOpen, setIsOpenEditor } = useHabitContext();
 
   return (
     <div className={styles.card}>
